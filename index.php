@@ -9,7 +9,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>OneVote - Election Home</title> 
+    <title>OneVote - One Person One Vote</title>
+    <link rel="icon" href="img/icon.png">
   </head>
 
     <body>
@@ -20,12 +21,13 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
 
-          <br><h1>Select Election</h1>
+          <br><br><br><br><br><br><br>
+          <p style="text-align: center"><img src="img/logo.png"></p><br>
 
           <form method="post">
 
             <fieldset>
-              <legend>Enter transaction to enter an election.</legend>
+              <legend>Enter provided Transaction Hash to Enter the Election</legend>
 
               <div class="row">
 
@@ -80,7 +82,7 @@ if(isset($_POST['election_details'])){
 
   if ($rowcount == 1){
       $_SESSION['transaction_hash'] = $transaction_hash;
-      echo "<script>window.location = 'http://localhost:81/onevoteHome/details.php'</script>";
+      echo "<script>window.location = 'http://localhost/onevoteHome/details.php'</script>";
   }
   else{
     echo "<script>alert('Sorry the transaction hash is not valid.')</script>";
