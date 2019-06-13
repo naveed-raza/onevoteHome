@@ -24,15 +24,13 @@
           <br><br><br><br><br><br><br>
           <p style="text-align: center"><img src="img/logo.png"></p><br>
 
-          <form method="post">
-
             <fieldset>
               <legend>Enter provided Transaction Hash to Enter the Election</legend>
 
               <div class="row">
 
               <div class="col-md-12">
-                <input type="text" class="form-control" placeholder="Enter transaction_hash" name="transaction_hash">
+                <input type="text" class="form-control" placeholder="Enter transaction_hash" id="transaction_hash">
               </div>
 
             </div>
@@ -42,7 +40,7 @@
             <div class="row">
 
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" name="election_details">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" onClick="loginElection()">Submit</button>
               </div>
 
             </div>
@@ -66,30 +64,26 @@
 </html>
 
 
+<script type="text/javascript">
 
+  const loginElection = async() => {
 
+    var transaction_hash = document.getElementById("transaction_hash").value;
+    var public_address = "0x70a47E1Be460464bE8Dc17F2FDEEf2dC306f274d";
+    console.log(transaction_hash);
+    
+    let url = "http://localhost:3002/voter_login/"  + transaction_hash + "/" + public_address;
+    const response = await fetch(url);
+    const myJson = await response.json();
+    console.log(myJson);
+    
+    if(myJson.status){
+      localStorage.setItem("transaction_hash", transaction_hash);
+      window.location.href = 'http://localhost/onevoteHome/voting.php';
+    } else {
+      alert(myJson.msg)
+    }
 
-<?php
-
-include("db.php");
-
-if(isset($_POST['election_details'])){
-
-  $transaction_hash = $_POST['transaction_hash'];
-
-  $transaction_result= mysqli_query($onevote_db, "SELECT * FROM election WHERE transaction_hash = '$transaction_hash'");
-  $rowcount = mysqli_num_rows($transaction_result);
-
-  if ($rowcount == 1){
-      $_SESSION['transaction_hash'] = $transaction_hash;
-      echo "<script>window.location = 'http://localhost/onevoteHome/details.php'</script>";
   }
-  else{
-    echo "<script>alert('Sorry the transaction hash is not valid.')</script>";
-  }
 
-}
-
-?>
-
-
+</script>

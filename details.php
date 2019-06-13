@@ -159,56 +159,7 @@ include("db.php");
 
     }
 
-   // getPostCandidates();
-
   }  
-
-
-
-  //   const getPostCandidates = async() => {
-  //   let url = "http://localhost:3002/get_all_posts/" + document.getElementById("hash").innerHTML;
-  //   let response = await fetch(url);
-  //   let myJson = await response.json();
-  //   console.log(myJson);
-    
-  //   let posts = myJson.posts;
-  //   let postsLength = posts.length;
-
-  //   let url1 = "http://localhost:3002/get_all_candidates/" + document.getElementById("hash").innerHTML;
-  //   let response1 = await fetch(url1);
-  //   let myJson1 = await response1.json();
-  //   console.log(myJson1);
-    
-  //   let candidates = myJson1.candidates;
-  //   let candidatesLength = candidates.length;
-
-
-
-
-  //   for(var i=0; i<postsLength; i++){
-  //       var para = document.createElement("h5");
-  //       var node = document.createTextNode(posts[i]);
-  //       para.appendChild(node);
-  //       para.id =  "postItem";
-
-  //       for(var j=i; j<candidatesLength; j++){
-  //         var para1 = document.createElement("h6");
-  //         var node1 = document.createTextNode(candidates[j]);
-  //         para1.appendChild(node1);
-
-  //         console.log(para1)
-
-  //         // var element1 = document.getElementById("postItem");
-  //         // element1.appendChild(para1);
-  //       }
-
-  //       var element = document.getElementById("postCandidates");
-  //       element.appendChild(para);
-  //   }
-
-
-
-  // }  
 
   window.onload = getElectionDetails();
 </script>
