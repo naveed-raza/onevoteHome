@@ -1,14 +1,4 @@
-<?php
 
-session_start();
-
-if(isset($_SESSION['transaction_hash'])){
-  $transaction_hash = $_SESSION['transaction_hash'];
-}
-
-include("db.php");
-
-?>
 
 
 <!doctype html>
@@ -47,7 +37,7 @@ include("db.php");
           
           <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" name="nextButton" id="nextButton" onClick="checkPosts()">Vote</button>
           
-          <p id ="hash" style="color: white;"><?php echo $transaction_hash; ?></p><br>
+          
 
         </div>
 
@@ -74,7 +64,7 @@ include("db.php");
 
   const checkPosts = async () => {
 
-    let url = "http://localhost:3002/get_all_posts/" + document.getElementById("hash").innerHTML;
+    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -98,7 +88,7 @@ include("db.php");
     var element = document.getElementById("candidatesList");
     element.innerHTML = '';
 
-    let url = "http://localhost:3002/get_election_details/" + document.getElementById("hash").innerHTML;
+    let url = "http://localhost:3002/get_election_details/" + transaction_hash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -110,7 +100,7 @@ include("db.php");
 
   const getPosts = async() => {
     
-    let url = "http://localhost:3002/get_all_posts/" + document.getElementById("hash").innerHTML;
+    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -123,7 +113,7 @@ include("db.php");
 
   const getPostCandidates = async() => {
     
-    let url = "http://localhost:3002/get_post_candidates/" + document.getElementById("hash").innerHTML + "/" + postId;
+    let url = "http://localhost:3002/get_post_candidates/" + transaction_hash + "/" + postId;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
