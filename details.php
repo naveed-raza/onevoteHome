@@ -1,16 +1,3 @@
-<?php
-
-session_start();
-
-if(isset($_SESSION['transaction_hash'])){
-  $transaction_hash = $_SESSION['transaction_hash'];
-}
-
-include("db.php");
-
-?>
-
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -40,7 +27,7 @@ include("db.php");
     <div class="col-md-6">
 
       <h1 id="electionName" align="center" style="margin-top: 70px; "></h1>
-      <p id ="hash" style="color: white;"><?php echo $transaction_hash; ?></p><br>
+
 
 
       <!-- Nav pills -->
@@ -77,13 +64,14 @@ include("db.php");
 <script>
 
   const getElectionDetails = async () => {   
-      let url = "http://localhost:3002/get_election_details/" + document.getElementById("hash").innerHTML;
+      var transaction_hash = localStorage.getItem("transaction_hash");
+      let url = "http://localhost:3002/get_election_details/" + transaction_hash;
       const response = await fetch(url);
       const myJson = await response.json();
       console.log(myJson);
      document.getElementById("electionName").innerHTML = myJson.election_name + " Election";
 
-     getAllPosts();
+     // getAllPosts();
       
   }  
 

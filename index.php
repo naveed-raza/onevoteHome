@@ -69,7 +69,7 @@
   const loginElection = async() => {
 
     var transaction_hash = document.getElementById("transaction_hash").value;
-    var public_address = "0x70a47E1Be460464bE8Dc17F2FDEEf2dC306f274d";
+    var public_address = "0x13AB9be743BBBd271Ed766Fe20fc5c4Ed8a64F4C";
     console.log(transaction_hash);
     
     let url = "http://localhost:3002/voter_login/"  + transaction_hash + "/" + public_address;
@@ -79,7 +79,9 @@
     
     if(myJson.status){
       localStorage.setItem("transaction_hash", transaction_hash);
-      window.location.href = 'http://localhost/onevoteHome/voting.php';
+      localStorage.setItem("public_address", public_address);
+      localStorage.setItem("voter_id", myJson.voter_id);
+      window.location.href = 'http://localhost:81/onevoteHome/voting.php';
     } else {
       alert(myJson.msg)
     }

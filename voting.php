@@ -35,7 +35,7 @@
         
           <ul id="candidatesList" class="list-group" style="margin-top: 20px;"></ul>
           
-          <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" name="nextButton" id="nextButton" onClick="checkPosts()">Vote</button>
+          <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" name="nextButton" id="nextButton" onClick="checkPostAndRadio()">Vote</button>
           
           
 
@@ -59,8 +59,71 @@
 <script>
 
   var postId = 0;
+  var voterId = localStorage.getItem("voter_id");
   var transaction_hash = localStorage.getItem("transaction_hash");
+  var public_address = localStorage.getItem("public_address");
   console.log(transaction_hash);
+
+
+  const checkPostAndRadio = async() => {
+
+    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
+    const response = await fetch(url);
+    const myJson = await response.json();
+    console.log(myJson);
+    let posts = myJson.posts;
+    let postsLength = posts.length;
+
+
+    var radios = document.getElementsByTagName('input');
+    var value = "";
+    
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].type === 'radio' && radios[i].checked) {
+        value = radios[i].value;  
+
+        let url1 = "http://localhost:3002/get_candidate/" + transaction_hash + "/" + value;
+        const response1 = await fetch(url1);
+        const myJson1 = await response1.json();
+        console.log(myJson1);
+        let candidateId = myJson1.candidate_id;
+
+        let post_id = postId - 1;
+
+        let url2 = "http://localhost:3002/cast_vote/" + candidateId + "/" + post_id + "/" + voterId + "/" + transaction_hash + "/"  + public_address;
+        const response2 = await fetch(url2);
+        const myJson2 = await response2.json();
+        console.log(myJson2);
+        let vote_transaction_hash = myJson2.vote_transaction_hash;
+
+
+        console.log("Value : " + value);
+        console.log("Public address :" + public_address);
+        console.log("Voter Id : " + voterId);
+        console.log("Candidate ID :" + candidateId);
+        console.log("Post Id :" + post_id);
+        console.log("Vote transaction Hash :" + vote_transaction_hash);
+        
+
+
+
+          if(postId == postsLength){
+            // window.location.href = "http://localhost:81/onevoteHome/details.php";
+            alert("Election completed thankyou.")
+           } 
+           else {
+          getElectionDetails();
+          }
+      }
+    }
+
+    if (value == ""){
+      alert("Please select any option.");
+    }
+
+}
+
+
 
   const checkPosts = async () => {
 
@@ -73,7 +136,7 @@
 
     if(postId == postsLength){
 
-      window.location.href = "http://localhost/onevoteHome/details.php";
+      window.location.href = "http://localhost:81/onevoteHome/details.php";
 
     } else {
 
@@ -143,11 +206,13 @@
       list.appendChild(label);
       element.appendChild(list);
 
+
     }
 
     incrementPostId();
 
   }
+
 
   function incrementPostId(){
     postId++;
