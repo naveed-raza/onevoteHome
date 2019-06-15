@@ -79,10 +79,12 @@
     var value = "";
     
     for (var i = 0; i < radios.length; i++) {
+      
       if (radios[i].type === 'radio' && radios[i].checked) {
+        
         value = radios[i].value;  
 
-        let url1 = "http://localhost:3002/get_candidate/" + transaction_hash + "/" + value;
+        let url1 = "http://localhost:3002/get_candidate_by_name/" + transaction_hash + "/" + value;
         const response1 = await fetch(url1);
         const myJson1 = await response1.json();
         console.log(myJson1);
@@ -105,20 +107,24 @@
         console.log("Vote transaction Hash :" + vote_transaction_hash);
         
 
-
-
           if(postId == postsLength){
-            // window.location.href = "http://localhost:81/onevoteHome/details.php";
+            
             alert("Election completed thankyou.")
-           } 
-           else {
-          getElectionDetails();
+            window.location.href = 'http://localhost/onevoteHome';
+           
+           } else {
+
+            getElectionDetails();
+          
           }
+      
       }
     }
 
     if (value == ""){
+      
       alert("Please select any option.");
+    
     }
 
 }
@@ -136,7 +142,7 @@
 
     if(postId == postsLength){
 
-      window.location.href = "http://localhost:81/onevoteHome/details.php";
+      window.location.href = "http://localhost/onevoteHome/details.html";
 
     } else {
 
@@ -155,7 +161,7 @@
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
-    document.getElementById("electionName").innerHTML = myJson.election_name + " Election";
+    document.getElementById("electionName").innerHTML = myJson.election_details.election_name + " Election";
 
     getPosts();
       
