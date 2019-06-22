@@ -21,7 +21,11 @@
         
         <div class="col-md-10" id="results_div">
 
-          <h1 id="election_name" align="center" style="margin-top: 70px; margin-bottom: 50px;" class="display-4"></h1>
+          <h1 id="election_name" align="center" style="margin-top: 50px; margin-bottom: 50px" class="display-4"></h1>
+
+          <input type="text" class="form-control" style="margin-bottom: 10px" placeholder="Enter transaction_hash to track your casted vote" id="transaction_hash">
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" style="margin-bottom: 50px" onClick="getVotes()">TRACK VOTE</button>
 
         </div>
 
@@ -42,9 +46,10 @@
 
 <script type="text/javascript">
 
+  const transaction_hash = "0x35cf9d4bb0803dbc4544bf32aa4f20a3daa423aed188f64d41a23dc4f783c2be";
+
   const getElectionDetails = async() => {
 
-    const transaction_hash = "0x9f29d836af703c5f9f95836ef4a60acf87e4c000d5d56c5282da3000d810890d";
     let url = "http://localhost:3002/get_election_details/" + transaction_hash;
     const response = await fetch(url);
     const myJson = await response.json();
@@ -57,7 +62,6 @@
 
   const getResults = async() => {
 
-    const transaction_hash = "0x9f29d836af703c5f9f95836ef4a60acf87e4c000d5d56c5282da3000d810890d";
     let url = "http://localhost:3002/get_election_stats/"  + transaction_hash;
     const response = await fetch(url);
     const myJson = await response.json();

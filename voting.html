@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <title>OneVote - One Person One Vote</title>
+    <title>OneVote - Cast Vote</title>
     <link rel="icon" href="img/icon.png">
   
   </head>
@@ -60,20 +60,21 @@
 
   var postId = 0;
   var voterId = localStorage.getItem("voter_id");
-  var transaction_hash = localStorage.getItem("transaction_hash");
-  var public_address = localStorage.getItem("public_address");
-  console.log(transaction_hash);
+  var electionName;
+  var tHash = [];
+  var transactionHash = localStorage.getItem("transaction_hash");
+  var publicAddress = localStorage.getItem("public_address");
+  console.log(transactionHash);
 
 
   const checkPostAndRadio = async() => {
 
-    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
     let posts = myJson.posts;
     let postsLength = posts.length;
-
 
     var radios = document.getElementsByTagName('input');
     var value = "";
@@ -84,7 +85,7 @@
         
         value = radios[i].value;  
 
-        let url1 = "http://localhost:3002/get_candidate_by_name/" + transaction_hash + "/" + value;
+        let url1 = "http://localhost:3002/get_candidate_by_name/" + transactionHash + "/" + value;
         const response1 = await fetch(url1);
         const myJson1 = await response1.json();
         console.log(myJson1);
@@ -92,48 +93,75 @@
 
         let post_id = postId - 1;
 
-        let url2 = "http://localhost:3002/cast_vote/" + candidateId + "/" + post_id + "/" + voterId + "/" + transaction_hash + "/"  + public_address;
+        let url2 = "http://localhost:3002/cast_vote/" + candidateId + "/" + post_id + "/" + voterId + "/" + transactionHash + "/"  + publicAddress;
         const response2 = await fetch(url2);
         const myJson2 = await response2.json();
         console.log(myJson2);
         let vote_transaction_hash = myJson2.vote_transaction_hash;
 
+        tHash.push(vote_transaction_hash);
+
 
         console.log("Value : " + value);
-        console.log("Public address :" + public_address);
+        console.log("Public address :" + publicAddress);
         console.log("Voter Id : " + voterId);
         console.log("Candidate ID :" + candidateId);
         console.log("Post Id :" + post_id);
         console.log("Vote transaction Hash :" + vote_transaction_hash);
         
 
-          if(postId == postsLength){
-            
-            alert("Election completed thankyou.")
-            window.location.href = 'http://localhost/onevoteHome';
-           
-           } else {
+        if(postId == postsLength){
 
-            getElectionDetails();
+          console.log(electionName);
+          console.log(tHash);
+
+          sendTransactionMail();
           
-          }
+          alert("Election completed thankyou.")
+          window.location.href = 'http://localhost/onevoteHome';
+         
+         } else {
+
+          getElectionDetails();
+        
+        }
       
       }
-    }
-
-    if (value == ""){
-      
-      alert("Please select any option.");
     
     }
 
-}
+    if (value == ""){
+    
+      alert("Please select any option.");
 
+    }
+  }
+
+
+  const sendTransactionMail = async () => {
+
+    var jsonToSend = {
+      "election_name" : electionName,
+      "email" : "adilsachwani@gmail.com",
+      "transaction_hash" : tHash
+    }
+
+    let url = "http://localhost:3002/send_transaction_mail"
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(jsonToSend)
+    });
+
+    const myJson = await response.json();
+
+  }
 
 
   const checkPosts = async () => {
 
-    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -149,7 +177,7 @@
       getElectionDetails();
 
     }
-  
+    
   }
 
   const getElectionDetails = async () => {
@@ -157,11 +185,14 @@
     var element = document.getElementById("candidatesList");
     element.innerHTML = '';
 
-    let url = "http://localhost:3002/get_election_details/" + transaction_hash;
+    let url = "http://localhost:3002/get_election_details/" + transactionHash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
-    document.getElementById("electionName").innerHTML = myJson.election_details.election_name + " Election";
+
+    electionName = myJson.election_details.election_name;
+
+    document.getElementById("electionName").innerHTML = electionName + " Election";
 
     getPosts();
       
@@ -169,7 +200,7 @@
 
   const getPosts = async() => {
     
-    let url = "http://localhost:3002/get_all_posts/" + transaction_hash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -182,7 +213,7 @@
 
   const getPostCandidates = async() => {
     
-    let url = "http://localhost:3002/get_post_candidates/" + transaction_hash + "/" + postId;
+    let url = "http://localhost:3002/get_post_candidates/" + transactionHash + "/" + postId;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
