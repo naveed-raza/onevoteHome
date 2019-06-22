@@ -27,6 +27,15 @@
 
           <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" style="margin-bottom: 50px" onClick="getVotes()">TRACK VOTE</button>
 
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+              <table class="table table-bordered table-dark" id="transaction_table"></table>
+            </div>
+            <div class="col-md-2"></div>
+          </div>
+
+
         </div>
 
         <div class="col-md-1"></div>
@@ -129,6 +138,52 @@
       div.appendChild(table);
 
     }
+
+  }
+
+  const getVotes = async() => {
+
+    var hash = document.getElementById("transaction_hash").value;
+    let url = "http://localhost:3002/get_vote_details/" + hash;
+    const response = await fetch(url);
+    const myJson = await response.json();
+    console.log(myJson);
+    let results = myJson.votes;
+
+    var table = document.getElementById('transaction_table');
+    table.innerHTML = "";
+    var thead = document.createElement("thead");
+    thead.classList.add("thead-dark");
+    var tr = document.createElement("tr");
+    var th_post = document.createElement("th");
+    var th_candidate = document.createElement("th");
+    var texth_post = document.createTextNode("Post");
+    var texth_candidate = document.createTextNode("Candidate");
+    th_post.appendChild(texth_post);
+    th_candidate.appendChild(texth_candidate);
+    tr.appendChild(th_post);
+    tr.appendChild(th_candidate);
+    thead.appendChild(tr);
+    table.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+
+    for (var i=0; i<results.length; i++) {
+
+      var tr = document.createElement("tr");
+      var td_post = document.createElement("td");
+      var td_candidate = document.createElement("td");
+      var text_post = document.createTextNode(results[i].post);
+      var text_candidate = document.createTextNode(results[i].candidate);
+      td_post.appendChild(text_post);
+      td_candidate.appendChild(text_candidate);
+      tr.appendChild(td_post);
+      tr.appendChild(td_candidate);
+      tbody.appendChild(tr);
+
+    }
+
+    table.appendChild(tbody);
 
   }
 
