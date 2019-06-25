@@ -7,6 +7,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   
+    <script type="text/javascript" src="web3.min.js"></script>
 
     <title>OneVote - One Person One Vote</title>
     <link rel="icon" href="img/icon.png">
@@ -65,11 +67,50 @@
 
 <script type="text/javascript">
 
+  const Web3 = require('web3');
+  var web3;
+  var web3Provider = null;
+  var public_address;
+
+  const connectWithWeb3 = async() => {
+
+    if (typeof web3 !== 'undefined') {
+      // If a web3 instance is already provided by Meta Mask.
+      web3Provider = web3.currentProvider;
+      web3 = new Web3(web3.currentProvider);
+      console.log("Metamask connected");
+    } else {
+      // Specify default instance if no web3 instance provided
+      web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      web3 = new Web3(web3Provider);
+      console.log("ganache connected");
+    }
+
+    getPublicAddress();
+
+  }
+
+
+  const getPublicAddress = async() => {
+
+        web3.eth.getCoinbase(function(err, account) {
+        if(err === null){
+          public_address = account.toUpperCase();;
+          console.log(account);
+        }
+        else{
+          console.log(err);
+        }
+      })
+  }
+
+
   const loginElection = async() => {
 
-    var transaction_hash = document.getElementById("transaction_hash").value;
-    var public_address = "0x70a47E1Be460464bE8Dc17F2FDEEf2dC306f274d";
+    var transaction_hash = document.getElementById("transaction_hash").value;  
+
     console.log(transaction_hash);
+    console.log(public_address);
     
     let url = "http://localhost:3002/voter_login/"  + transaction_hash + "/" + public_address;
     const response = await fetch(url);
@@ -81,7 +122,7 @@
       localStorage.setItem("transaction_hash", transaction_hash);
       localStorage.setItem("public_address", public_address);
       localStorage.setItem("voter_id", myJson.voter_id);
-      window.location.href = 'http://localhost/onevoteHome/voting.html';
+      window.location.href = 'http://localhost:81/onevoteHome/voting.html';
     
     } else {
       
@@ -90,5 +131,7 @@
     }
 
   }
+
+  window.onload = connectWithWeb3();
 
 </script>
