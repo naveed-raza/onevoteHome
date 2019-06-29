@@ -59,17 +59,17 @@
 <script>
 
   var postId = 0;
-  var voterId = localStorage.getItem("voter_id");
   var electionName;
   var tHash = [];
+  var voterId = localStorage.getItem("voter_id");
   var transactionHash = localStorage.getItem("transaction_hash");
   var publicAddress = localStorage.getItem("public_address");
   console.log(transactionHash);
-
+  console.log(publicAddress);
 
   const checkPostAndRadio = async() => {
 
-    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -85,7 +85,7 @@
         
         value = radios[i].value;  
 
-        let url1 = "http://localhost:3002/get_candidate_by_name/" + transactionHash + "/" + value;
+        let url1 = "http://localhost:3002/get_candidate_by_name/" + transactionHash + "/" +  publicAddress + "/" + value;
         const response1 = await fetch(url1);
         const myJson1 = await response1.json();
         console.log(myJson1);
@@ -93,7 +93,7 @@
 
         let post_id = postId - 1;
 
-        let url2 = "http://localhost:3002/cast_vote/" + candidateId + "/" + post_id + "/" + voterId + "/" + transactionHash + "/"  + publicAddress;
+        let url2 = "http://localhost:3002/cast_vote/" + transactionHash + "/" + publicAddress + "/" + candidateId + "/" + post_id + "/" + voterId;
         const response2 = await fetch(url2);
         const myJson2 = await response2.json();
         console.log(myJson2);
@@ -118,7 +118,7 @@
           sendTransactionMail();
           
           alert("Election completed thankyou.")
-          window.location.href = 'http://localhost:81/onevoteHome';
+          window.location.href = 'http://localhost/onevoteHome';
          
          } else {
 
@@ -142,7 +142,7 @@
 
     var jsonToSend = {
       "election_name" : electionName,
-      "email" : "naveedraza2907@gmail.com",
+      "email" : "adilsachwani@gmail.com",
       "transaction_hash" : tHash
     }
 
@@ -161,7 +161,7 @@
 
   const checkPosts = async () => {
 
-    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -185,7 +185,7 @@
     var element = document.getElementById("candidatesList");
     element.innerHTML = '';
 
-    let url = "http://localhost:3002/get_election_details/" + transactionHash;
+    let url = "http://localhost:3002/get_election_details/" + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -200,7 +200,7 @@
 
   const getPosts = async() => {
     
-    let url = "http://localhost:3002/get_all_posts/" + transactionHash;
+    let url = "http://localhost:3002/get_all_posts/" + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -213,7 +213,7 @@
 
   const getPostCandidates = async() => {
     
-    let url = "http://localhost:3002/get_post_candidates/" + transactionHash + "/" + postId;
+    let url = "http://localhost:3002/get_post_candidates/" + transactionHash + "/" + publicAddress + "/" + postId;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);

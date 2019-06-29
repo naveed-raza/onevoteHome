@@ -55,11 +55,12 @@
 
 <script type="text/javascript">
 
-  const transaction_hash = "0x87b581070b5913405e79c6606ee60b505c36569035e0f921915a0a21ae5876e8";
+  var transactionHash = localStorage.getItem("transaction_hash");
+  var publicAddress = localStorage.getItem("public_address");
 
   const getElectionDetails = async() => {
 
-    let url = "http://localhost:3002/get_election_details/" + transaction_hash;
+    let url = "http://localhost:3002/get_election_details/" + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     console.log(myJson);
@@ -71,7 +72,7 @@
 
   const getResults = async() => {
 
-    let url = "http://localhost:3002/get_election_stats/"  + transaction_hash;
+    let url = "http://localhost:3002/get_election_stats/"  + transactionHash + "/" + publicAddress;
     const response = await fetch(url);
     const myJson = await response.json();
     let results = myJson.results;

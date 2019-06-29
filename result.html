@@ -10,7 +10,7 @@
    
     <script type="text/javascript" src="web3.min.js"></script>
 
-    <title>OneVote - One Person One Vote</title>
+    <title>OneVote - Result</title>
     <link rel="icon" href="img/icon.png">
   </head>
 
@@ -26,7 +26,7 @@
           <p style="text-align: center"><img src="img/logo.png"></p><br>
 
             <fieldset>
-              <legend>Enter provided Transaction Hash to Enter the Election</legend>
+              <legend>Enter provided Transaction Hash to check Results</legend>
 
               <div class="row">
 
@@ -41,7 +41,7 @@
             <div class="row">
 
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" onClick="loginElection()">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block btn btn-success" onClick="loginResults()">Submit</button>
               </div>
 
             </div>
@@ -105,30 +105,16 @@
   }
 
 
-  const loginElection = async() => {
+  const loginResults = async() => {
 
     var transaction_hash = document.getElementById("transaction_hash").value;
 
     console.log(transaction_hash);
     console.log(public_address);
     
-    let url = "http://localhost:3002/voter_login/"  + transaction_hash + "/" + public_address;
-    const response = await fetch(url);
-    const myJson = await response.json();
-    console.log(myJson);
-    
-    if(myJson.status){
-      
-      localStorage.setItem("transaction_hash", transaction_hash);
-      localStorage.setItem("public_address", public_address);
-      localStorage.setItem("voter_id", myJson.voter_id);
-      window.location.href = 'http://localhost/onevoteHome/voting.html';
-    
-    } else {
-      
-      alert(myJson.msg)
-    
-    }
+    localStorage.setItem("transaction_hash", transaction_hash);
+    localStorage.setItem("public_address", public_address);
+    window.location.href = 'http://localhost/onevoteHome/track.html';
 
   }
 
